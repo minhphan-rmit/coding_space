@@ -1,0 +1,9 @@
+ID: s3962053
+Name: Huynh Tin
+University: RMIT
+Major: Information Technology
+Year: 2022
+Python: DI
+OOP: HD
+C++: DI
+Java: CR

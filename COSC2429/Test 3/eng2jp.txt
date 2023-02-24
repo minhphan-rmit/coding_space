@@ -1,0 +1,14 @@
+i	watashi
+you	anata
+where	doko
+book	hon
+books	hon
+notebook	nooto
+and 	o
+one	ichi
+two	ni
+three 	san
+four	shi
+five 	go
+
+

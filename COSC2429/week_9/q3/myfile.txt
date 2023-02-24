@@ -1,0 +1,8 @@
+# RMIT University Vietnam
+# Author: Minh Phan
+# Created date: 14/12/2022
+
+# This is a very short program
+
+for i in range(100):
+    print("Hello World!")

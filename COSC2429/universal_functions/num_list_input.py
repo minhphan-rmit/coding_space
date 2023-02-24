@@ -1,0 +1,1 @@
+n_list = [int(item) for item in input('Input integers: ').split(',')]
