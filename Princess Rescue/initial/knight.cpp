@@ -33,6 +33,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
             rescue = 1;
             break;
         }
+
         // the event code is 1 to 5:
         if (route[i] >= 1 && route[i] <= 5) {
             int currentLevel0 = level0_cal(i);
@@ -43,6 +44,37 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                 level += 0;
             } else {
                 HP = HP - currentDmg;
+            }
+            if (level > 10) {
+                level = 10;
+            }
+            if (HP <= 0) {
+                if (phoenixdown > 0) {
+                    HP = maxHP;
+                    phoenixdown -= 1;
+                } else {
+                    rescue = 0;
+                    break;
+                }
+            } 
+        }
+        // the event code is 6 (Shaman)
+        if (route[i] == 6) {
+           int currentLevel0 = level0_cal(i); 
+           if (level > currentLevel0) {
+                level += 2;
+            } else if (level == currentLevel0) {
+                level += 0;
+            } else {
+                if (remedy >= 1) {
+                    remedy -= 1;
+                } else {
+                    if (HP <= 5) {
+                        HP = 1;
+                    } else {
+                        HP = HP / 5;
+                    }
+                }
             }
         }
     }
