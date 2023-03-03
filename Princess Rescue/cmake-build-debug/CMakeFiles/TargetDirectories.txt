@@ -1,0 +1,3 @@
+/Users/pnm/Desktop/Coding Space/coding_space/Princess Rescue/cmake-build-debug/CMakeFiles/Princess_Rescue.dir
+/Users/pnm/Desktop/Coding Space/coding_space/Princess Rescue/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/pnm/Desktop/Coding Space/coding_space/Princess Rescue/cmake-build-debug/CMakeFiles/rebuild_cache.dir
