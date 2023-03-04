@@ -65,7 +65,7 @@ void easyOpponents(int i, int & level, int & HP, int & maxHP, int & phoenixdown,
     }
 }
 
-void ShamanWitch(int i, int & level, int & HP, int & maxHP, int & phoenixdown, int & remedy, int & rescue, int opponentCode, int & ShamanExpire) {
+void ShamanWitch(int i, int & level, int & HP, int & maxHP, int & phoenixdown, int & remedy, int & rescue, int opponentCode, int & ShamanExpiry) {
     int current_levelO = levelO_cal(i);
 
     if (level > current_levelO) {
@@ -74,7 +74,7 @@ void ShamanWitch(int i, int & level, int & HP, int & maxHP, int & phoenixdown, i
     } else if (level == current_levelO) {
         level += 0;
     } else {
-        ShamanExpire = i + 4;
+        ShamanExpiry = i + 4;
         
         if (remedy >= 1) {
             remedy -= 1;
@@ -88,8 +88,8 @@ void ShamanWitch(int i, int & level, int & HP, int & maxHP, int & phoenixdown, i
     }
 }
 
-void ExpiredShamanCheck(int i, int & HP, int & maxHP, int & ShamanExpire) {
-    if (i == ShamanExpire) {
+void ShamanExpiryCheck(int i, int & HP, int & maxHP, int & ShamanExpiry) {
+    if (i == ShamanExpiry) {
         HP = HP * 5;
         if (HP > maxHP) {
             HP = maxHP;
@@ -101,7 +101,7 @@ void ExpiredShamanCheck(int i, int & HP, int & maxHP, int & ShamanExpire) {
     }
 }
 
-void SirenVajsh(int i, int & level, int & HP, int & maxHP, int & phoenixdown, int & remedy, int & maidenkiss, int & rescue, int opponentCode, int & SirenVajshExpire, int & beforeFrog) {
+void SirenVajsh(int i, int & level, int & HP, int & maxHP, int & phoenixdown, int & remedy, int & maidenkiss, int & rescue, int opponentCode, int & SirenVajshExpiry, int & beforeFrog) {
     int current_levelO = levelO_cal(i);
 
     if (level > current_levelO) {
@@ -110,7 +110,7 @@ void SirenVajsh(int i, int & level, int & HP, int & maxHP, int & phoenixdown, in
     } else if (level == current_levelO) {
         level += 0;
     } else {
-        SirenVajshExpire = i + 4;
+        SirenVajshExpiry = i + 4;
 
         if (maidenkiss >= 1) {
             level = level;
@@ -121,8 +121,8 @@ void SirenVajsh(int i, int & level, int & HP, int & maxHP, int & phoenixdown, in
     }
 }
 
-void ExpiredSirenVajshCheck(int i, int & level, int & SirenVajshExpire, int & beforeFrog) {
-    if (i == SirenVajshExpire) {
+void SirenVajshExpiryCheck(int i, int & level, int & SirenVajshExpiry, int & beforeFrog) {
+    if (i == SirenVajshExpiry) {
         level = beforeFrog;
     } else {
         return;
@@ -188,6 +188,19 @@ void MushFibo(int & HP) {
 }
 
 void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, int & maidenkiss, int & phoenixdown, int & rescue) {
+    // read data from input file and store 3 lines to an array
+    fstream myFile;
+    myFile.open("input", ios::in); //read mode
+    string line;
+    string data[] = {};
+    int line_count = 0;
+    if (myFile.is_open()) {
+        while (getline(myFile, data[line_count])) {
+            line_count++;
+        }
+        myFile.close();
+    }
+
     // sample route
     int route[5] = {1, 2, 8, 18, 99};
     int routeLength = sizeof(route) / sizeof(int); // size of will return bytes
@@ -195,85 +208,116 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
     // Set max HP
     int maxHP = HP;
 
-    int ShamanExpire = -1;
-    int SirenVajshExpire = -1;
+    int ShamanExpiry = -1;
+    int SirenVajshExpiry = -1;
     int beforeFrog = level;
+    bool Lancelot;
 
-    // Loop through every events stored in the array
-    for (int i = 0; i < routeLength; i++) {
+    // Check if the knight is Arthur
+    if (maxHP == 999) {
+        // check the occurence of 0 and return suitable rescue status
+        for (int j = 0; j < routeLength + 1; j++) {
+            if (route[j] == 0) {
+                rescue = 1;
+                break;
+            } else {
+                rescue = 0;
+            }
+        }
+    } else {
+        // Check if the knight is Lancelot
+        if (check_prime(maxHP)) {
+            Lancelot = true;
+        } else {
+            Lancelot = false;
+        }
+
+        // Loop through every events stored in the array
+        for (int i = 0; i < routeLength; i++) {
         
-        switch (rescue) {
-            // check the value of rescue
-            case 0:
-                break;
-            case 1:
-                break;
-            case -1:
-                ExpiredShamanCheck(i, HP, maxHP, ShamanExpire);
-                ExpiredSirenVajshCheck(i, level, SirenVajshExpire, beforeFrog);
-                switch (route[i]) {
-                    case 0: // Bowser GG (event code = 0)
-                        BowserGG(rescue);
-                        break;
-    
-                    case 1: // Mad Bear (event code = 1)
-                    case 2: // Bandit (event code = 2)
-                    case 3: // Lord Lupin (event code = 3)
-                    case 4: // Elf (event code = 4)
-                    case 5: // Troll (event code = 5)
-                        easyOpponents(i, level, HP, maxHP, phoenixdown, rescue, route[i]);
-                        break;
+            switch (rescue) {
+                // check the value of rescue
+                case 0: // the adventure ends without princess
+                    break;
+                case 1: // the adventure ends with princess
+                    break;
+                case -1: // keep continue
 
-                    // Shaman (event code = 6)
-                    case 6:
-                        if (i >= (SirenVajshExpire - 3) && i < SirenVajshExpire) {
+                    // check the expiry of Shaman and Siren Vajsh effects
+                    ShamanExpiryCheck(i, HP, maxHP, ShamanExpiry);
+                    SirenVajshExpiryCheck(i, level, SirenVajshExpiry, beforeFrog);
+
+                    // check the event code with the suitable case
+                    switch (route[i]) {
+                        case 0: // Bowser GG (event code = 0)
+                            BowserGG(rescue);
                             break;
-                        } else {
-                            ShamanWitch(i, level, HP, maxHP, phoenixdown, remedy, rescue, route[i], ShamanExpire);
+        
+                        case 1: // Mad Bear (event code = 1)
+                        case 2: // Bandit (event code = 2)
+                        case 3: // Lord Lupin (event code = 3)
+                        case 4: // Elf (event code = 4)
+                        case 5: // Troll (event code = 5)
+                            if (Lancelot) { // if the knight is Lancelot then always win
+                                level += 1;
+                                break;
+                            } else {
+                                easyOpponents(i, level, HP, maxHP, phoenixdown, rescue, route[i]);
+                                break;
+                            }
+                            
+                        // Shaman (event code = 6)
+                        case 6:
+                            if (i >= (SirenVajshExpiry - 3) && i < SirenVajshExpiry) { // if the knight is affected by Siren Vajsh then skip
+                                break;
+                            } else {
+                                ShamanWitch(i, level, HP, maxHP, phoenixdown, remedy, rescue, route[i], ShamanExpiry);
+                                break;
+                            }
+
+                        // Siren Vajsh (event code = 7)
+                        case 7:
+                            if (i >= (ShamanExpiry - 3) && i < ShamanExpiry) { // if the knight is affected by Shaman then skip
+                                break;
+                            } else {
+                                SirenVajsh(i, level, HP, maxHP, phoenixdown, remedy, maidenkiss, rescue, route[i], SirenVajshExpiry, beforeFrog);
+                                break;
+                            }
+
+                        // Mush Mario (event code = 11)
+                        case 11:  
+                            MushMario(HP, maxHP, level, phoenixdown);
                             break;
-                        }
 
-                    // Siren Vajsh (event code = 7)
-                    case 7:
-                        if (i >= (ShamanExpire - 3) && i < ShamanExpire) {
+                        // Mush Fibonacci (event code = 12)
+                        case 12:
+                            MushFibo(HP);
                             break;
-                        } else {
-                            SirenVajsh(i, level, HP, maxHP, phoenixdown, remedy, maidenkiss, rescue, route[i], SirenVajshExpire, beforeFrog);
-                            break;
-                        }
 
-                    // Mush Mario (event code = 11)
-                    case 11:  
-                        MushMario(HP, maxHP, level, phoenixdown);
-                        break;
+                        // Mush Ghost (event code = 13<ms>)
+                        case 13:
 
-                    // Mush Fibonacci (event code = 12)
-                    case 12:
-                        MushFibo(HP);
-                        break;
-                        
-                    // Mush Ghost (event code = 13<ms>)
-                    case 13:
+                        // Remedy (event code = 15)
+                        case 15:
 
-                    // Remedy (event code = 15)
-                    case 15:
+                        // Maiden Kiss (event code = 16)
+                        case 16:
 
-                    // Maiden Kiss (event code = 16)
-                    case 16:
+                        // Phoenix Down (event code = 17)
+                        case 17:
 
-                    // Phoenix Down (event code = 17)
-                    case 17:
+                        // Merlin (event code = 18)
+                        case 18:
 
-                    // Merlin (event code = 18)
-                    case 18:
+                        // Asclepius (event code = 19)
+                        case 19:
 
-                    // Asclepius (event code = 19)
-                    case 19:
-
-                    // Bowser (event code = 99)
-                    case 99:
-                    default:
-                }
+                        // Bowser (event code = 99)
+                        case 99:
+                        default:
+                    }
+            }
         }
     }
+    
 }
