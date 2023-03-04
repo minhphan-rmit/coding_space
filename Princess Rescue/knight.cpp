@@ -216,6 +216,108 @@ void MushFibo(int & HP) {
 }
 
 
+// Event 13<ms>: Mush Ghost
+void MushGhost(string file_name, int eventCode, int & HP, int & maxHP) {
+    fstream mushGhostPack;
+    mushGhostPack.open(file_name, ios::in);
+    string line;
+    string packData[] = {};
+    int line_count = 0;
+    if (mushGhostPack.is_open()) {
+        while (getline(mushGhostPack, packData[line_count])) {
+            line_count++;
+        }
+        mushGhostPack.close();
+    }
+
+}
+
+// Child functions
+// Mush Ghost type 1
+void MushGhost1(string numbers, int & HP) {
+    int nums[] = {};
+    int i = 0;
+    stringstream inum(numbers);
+    while (inum.good() && i < digitsCount(numbers)) {
+        inum >> nums[i];
+        ++i;
+    }
+
+    int max = nums[0], max_pos = 0, min = nums[0], min_pos = 0;
+    for (int j = 0; j < digitsCount(numbers); j++) {
+        if (max < nums[i]) {
+            max = nums[i];
+            max_pos = i;
+        }
+    }
+    for (int k = 0; k < digitsCount(numbers); k++) {
+        if (min < nums[i]) {
+            min = nums[i];
+            min_pos = i;
+        }
+    }
+    // Remaining HP
+    HP = HP - (max_pos + min_pos);
+}
+// Mush Ghost type 2
+void MushGhost1(string numbers, int & HP) {
+    int nums[] = {};
+    int i = 0;
+    stringstream inum(numbers);
+    while (inum.good() && i < digitsCount(numbers)) {
+        inum >> nums[i];
+        ++i;
+    }
+
+    int max = nums[0], max_pos = 0, min = nums[0], min_pos = 0;
+    for (int j = 0; j < digitsCount(numbers); j++) {
+        if (max < nums[i]) {
+            max = nums[i];
+            max_pos = i;
+        }
+    }
+    for (int k = 0; k < digitsCount(numbers); k++) {
+        if (min < nums[i]) {
+            min = nums[i];
+            min_pos = i;
+        }
+    }
+    bool up_check, down_check;
+    for (int a = 0; a < max_pos + 1; a++) {
+        if (nums[a] < nums[a+1]) {
+            up_check = true;
+        } else {
+            up_check = false;
+            break;
+        }
+    }
+    for (int b = max_pos; b < digitsCount(numbers); b++) {
+        if (nums[b] > nums[b+1]) {
+            down_check = true;
+        } else {
+            down_check = false;
+            break;
+        }
+    }
+    int mtx, mti;
+    if (max_pos == 0 && min_pos == digitsCount(numbers) && down_check == true) {
+        mtx = max;
+        mti = max_pos;
+    } else if (max_pos == digitsCount(numbers) && min_pos == 0 && up_check == true) {
+        mtx = max;
+        mti = max_pos;
+    }
+}
+// Mush Ghost type 3
+void MushGhost1() {
+    
+}
+// Mush Ghost type 4
+void MushGhost1() {
+    
+}
+
+
 // Event 15: Pick up Remedy
 // If the knight is being affected by Shaman then use immediately
 void remedyUse(int & HP, int & maxHP) {
