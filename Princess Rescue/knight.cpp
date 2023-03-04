@@ -187,6 +187,16 @@ void MushFibo(int & HP) {
     }
 }
 
+int digitsCount(string txt) {
+    int spaceCount = 0;
+    for (int i = 0; i < txt.length(); i++) {
+        if (isspace(txt[i])) {
+            spaceCount++;
+        }
+    }
+    return spaceCount + 1;
+}
+
 void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, int & maidenkiss, int & phoenixdown, int & rescue) {
     // read data from input file and store 3 lines to an array
     fstream myFile;
@@ -201,12 +211,46 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         myFile.close();
     }
 
-    // sample route
-    int route[5] = {1, 2, 8, 18, 99};
-    int routeLength = sizeof(route) / sizeof(int); // size of will return bytes
+    // knight's statistics input
+    string knight_data = data[0];
+    int knight_stat[] = {};
+    int b = 0;
+    stringstream iknight(knight_data);
+    while (iknight.good() && b < digitsCount(knight_data)) {
+        iknight >> knight_stat[b];
+        ++b;
+    }
 
-    // Set max HP
+    // assign to suitable variables
+    HP = knight_stat[0];
+    level = knight_stat[1];
+    remedy = knight_stat[2];
+    maidenkiss = knight_stat[3];
+    phoenixdown = knight_stat[4];
     int maxHP = HP;
+
+    // split line 2 into an array for route data
+    string sroute = data[1];
+    int route[] = {};
+    int c = 0;
+    stringstream iroute(sroute);
+    while (iroute.good() && c < digitsCount(sroute)) {
+        iroute >> route[c];
+        ++c;
+    }
+    int routeLength = digitsCount(sroute);
+
+    // external packs
+    string externalPackNames = data[2];
+    string exPacks[3];
+    stringstream exP(externalPackNames);
+    int d = 0;
+    while (exP.good()) {
+        string name;
+        getline(exP, name, ',');
+        exPacks[d] = name;
+        d++;
+    }
 
     int ShamanExpiry = -1;
     int SirenVajshExpiry = -1;
