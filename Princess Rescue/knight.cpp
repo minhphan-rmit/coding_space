@@ -229,10 +229,71 @@ void phoenixdownPick(int & phoenixdown) {
     }
 }
 
+void Merlin(string pack_name, int & HP, int & maxHP) {
+    fstream merlinPack;
+    merlinPack.open(pack_name, ios::in);
+    string line; 
+    string packData[] = {};
+    int line_count = 0;
+    if (merlinPack.is_open()) {
+        while (getline(merlinPack, packData[line_count])) {
+            line_count++;
+        }
+        merlinPack.close();
+    }
+    int numOfItems = stoi(packData[0]);
+    for (int i = 1; i < line_count + 1; i++) {
+        if (MerlinTextCheck2(packData[i])) {
+            HP += 2;
+        } else if (MerlinTextCheck3(packData[i])) {
+            HP += 3;
+        } else {
+            HP += 0;
+        }
+        if (HP > maxHP) {
+            HP = maxHP;
+        }
+    }
+}
+
+bool MerlinTextCheck2(string txt) {
+    int count_m, count_e, count_r, count_l, count_i, count_n = 0;
+    for (int i = 0; i < txt.length(); i++) {
+        switch (tolower(txt[i])) {
+            case 'm':
+                count_m++;
+            case 'e':
+                count_e++;
+            case 'r':
+                count_r++;
+            case 'l':
+                count_l++;
+            case 'i':
+                count_i++;
+            case 'n':
+                count_n++;
+        }
+    }
+    if (count_m > 0 && count_e > 0 && count_r > 0 && count_l > 0 && count_i > 0 && count_n > 0) {
+        return true;
+    } else {
+        return false; 
+    }
+}
+
+bool MerlinTextCheck3(string txt) {
+    int count_merlin = 0;
+    if (txt.find('merlin') != -1 || txt.find('Merlin')) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, int & maidenkiss, int & phoenixdown, int & rescue) {
     // read data from input file and store 3 lines to an array
     fstream myFile;
-    myFile.open("input", ios::in); //read mode
+    myFile.open(file_input, ios::in); //read mode
     string line;
     string data[] = {};
     int line_count = 0;
@@ -291,6 +352,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
     int SirenVajshExpiry = -1;
     int beforeFrog = level;
     bool Lancelot;
+    int MerlinAvail = 1;
 
     // Check if the knight is Arthur
     if (maxHP == 999) {
@@ -403,11 +465,19 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
 
                         // Merlin (event code = 18)
                         case 18:
-                            if (file_merlin_pack == "<file_merlin_pack>") {
-                                
-                            } else {
-                                break;
+                            switch (MerlinAvail) {
+                                case 1:
+                                    if (file_merlin_pack == "<file_merlin_pack>") {
+                                        Merlin(file_merlin_pack, HP, maxHP); 
+                                        MerlinAvail = 0;
+                                        break;
+                                    } else {
+                                        break;
+                                    }
+                                case 0:
+                                    break;
                             }
+                            
                         // Asclepius (event code = 19)
                         case 19:
 
