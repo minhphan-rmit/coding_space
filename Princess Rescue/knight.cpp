@@ -197,6 +197,38 @@ int digitsCount(string txt) {
     return spaceCount + 1;
 }
 
+void remedyUse(int & HP, int & maxHP) {
+    HP = HP * 5;
+    if (HP > maxHP) {
+        HP = maxHP;
+    }
+}
+
+void remedyPick(int & remedy) {
+   remedy++;
+   if (remedy > 99) {
+    remedy = 99;
+   }
+}
+
+void maidenkissUse(int & level, int & beforeFrog) {
+    level = beforeFrog;
+}
+
+void maidenkissPick(int & maidenkiss) {
+    maidenkiss++;
+    if (maidenkiss > 99) {
+        maidenkiss = 99;
+    }
+}
+
+void phoenixdownPick(int & phoenixdown) {
+    phoenixdown++;
+    if (phoenixdown > 99) {
+        phoenixdown = 99;
+    }
+}
+
 void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, int & maidenkiss, int & phoenixdown, int & rescue) {
     // read data from input file and store 3 lines to an array
     fstream myFile;
@@ -242,7 +274,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
 
     // external packs
     string externalPackNames = data[2];
-    string exPacks[3];
+    string exPacks[3] = {};
     stringstream exP(externalPackNames);
     int d = 0;
     while (exP.good()) {
@@ -251,6 +283,9 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         exPacks[d] = name;
         d++;
     }
+    string file_mush_ghost = exPacks[0];
+    string file_asclepius_pack = exPacks[1];
+    string file_merlin_pack = exPacks[2];
 
     int ShamanExpiry = -1;
     int SirenVajshExpiry = -1;
@@ -343,21 +378,51 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
 
                         // Remedy (event code = 15)
                         case 15:
+                            if (i >= (ShamanExpiry - 3) && i < ShamanExpiry) {
+                                remedyUse(HP, maxHP);
+                                break;
+                            } else {
+                                remedyPick(remedy);
+                                break;
+                            }
 
                         // Maiden Kiss (event code = 16)
                         case 16:
+                            if (i >= (SirenVajshExpiry - 3) && i < SirenVajshExpiry) {
+                                maidenkissUse(level, beforeFrog);
+                                break;
+                            } else {
+                                maidenkissPick(maidenkiss);
+                                break;
+                            }
 
                         // Phoenix Down (event code = 17)
                         case 17:
+                            phoenixdownPick(phoenixdown);
+                            break;
 
                         // Merlin (event code = 18)
                         case 18:
-
+                            if (file_merlin_pack == "<file_merlin_pack>") {
+                                
+                            } else {
+                                break;
+                            }
                         // Asclepius (event code = 19)
                         case 19:
 
                         // Bowser (event code = 99)
                         case 99:
+                            if (maxHP == 999) {
+                                level = 10;
+                                break;
+                            } else if (Lancelot == true && level >= 8) {
+                                level = 10;
+                                break;
+                            } else if (level == 10) {
+                                break;
+                            }
+
                         default:
                     }
             }
