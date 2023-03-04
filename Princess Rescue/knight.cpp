@@ -9,7 +9,41 @@ void display(int HP, int level, int remedy, int maidenkiss, int phoenixdown, int
          << ", rescue=" << rescue << endl;
 }
 
-// Function for calculating levelO of the opponent
+
+// Global functions (general functions)
+// Count digits in a string
+int digitsCount(string txt) {
+    int spaceCount = 0;
+    for (int i = 0; i < txt.length(); i++) {
+        if (isspace(txt[i])) {
+            spaceCount++;
+        }
+    }
+    return spaceCount + 1;
+}
+
+// Check the prime number
+bool check_prime(int n) {
+    bool is_prime = true;
+
+    // 0 and 1 are not prime numbers
+    if (n == 0 || n == 1) {
+        is_prime = false;
+    }
+
+    for (int i = 2; i <= n / 2; ++i) {
+        if (n % i == 0) {
+            is_prime = false;
+            break;
+        }
+    }
+
+    return is_prime;
+}
+
+
+// Combat functions
+// Calculate levelO of the opponent
 int levelO_cal(int i) {
     int iO = i + 1; // because the the array index starts from 0
     int b = iO % 10;
@@ -18,7 +52,7 @@ int levelO_cal(int i) {
     return levelO;
 }
 
-// Function for calculating the damage of the opponent
+// Calculate the damage of the opponent
 int dmg_cal(int levelO, int opponentCode) {
     opponentCode = opponentCode - 1;
     int baseDmg[5] = {1, 1.5, 4.5, 7.5, 9.5};
@@ -27,7 +61,7 @@ int dmg_cal(int levelO, int opponentCode) {
     return dmg;
 }
 
-// Function for checking the level is max or not
+// Check the level is max or not
 int maxLevel_check(int level) {
     if (level > 10) {
          return level = 10;
@@ -36,10 +70,14 @@ int maxLevel_check(int level) {
     }
 }
 
+
+// Event 0: Bowser surrenders and gives back the princess
 void BowserGG(int & rescue) {
     rescue = 1;
 }
 
+
+// Event 1-5: Mad Bear, Bandit, Lord Lupin, Elf, Troll
 void easyOpponents(int i, int & level, int & HP, int & maxHP, int & phoenixdown, int & rescue, int opponentCode) {
     int current_levelO = levelO_cal(i);
 
@@ -65,6 +103,8 @@ void easyOpponents(int i, int & level, int & HP, int & maxHP, int & phoenixdown,
     }
 }
 
+
+// Event 6: Shaman
 void ShamanWitch(int i, int & level, int & HP, int & maxHP, int & phoenixdown, int & remedy, int & rescue, int opponentCode, int & ShamanExpiry) {
     int current_levelO = levelO_cal(i);
 
@@ -101,6 +141,8 @@ void ShamanExpiryCheck(int i, int & HP, int & maxHP, int & ShamanExpiry) {
     }
 }
 
+
+// Event 7: Siren Vajsh
 void SirenVajsh(int i, int & level, int & HP, int & maxHP, int & phoenixdown, int & remedy, int & maidenkiss, int & rescue, int opponentCode, int & SirenVajshExpiry, int & beforeFrog) {
     int current_levelO = levelO_cal(i);
 
@@ -129,6 +171,8 @@ void SirenVajshExpiryCheck(int i, int & level, int & SirenVajshExpiry, int & bef
     }
 }
 
+
+// Event 11: Mush Mario
 void MushMario(int & HP, int & maxHP, int & level, int & phoenixdown) {
     int n1 = ((level + phoenixdown) % 5 + 1) * 3;
     int s1 = 0;
@@ -148,24 +192,8 @@ void MushMario(int & HP, int & maxHP, int & level, int & phoenixdown) {
     }
 } 
 
-bool check_prime(int n) {
-    bool is_prime = true;
 
-    // 0 and 1 are not prime numbers
-    if (n == 0 || n == 1) {
-        is_prime = false;
-    }
-
-    for (int i = 2; i <= n / 2; ++i) {
-        if (n % i == 0) {
-            is_prime = false;
-            break;
-        }
-    }
-
-    return is_prime;
-}
-
+// Event 12: Mush Fibonacci
 void MushFibo(int & HP) {
     if (HP == 1) {
         return;
@@ -187,16 +215,9 @@ void MushFibo(int & HP) {
     }
 }
 
-int digitsCount(string txt) {
-    int spaceCount = 0;
-    for (int i = 0; i < txt.length(); i++) {
-        if (isspace(txt[i])) {
-            spaceCount++;
-        }
-    }
-    return spaceCount + 1;
-}
 
+// Event 15: Pick up Remedy
+// If the knight is being affected by Shaman then use immediately
 void remedyUse(int & HP, int & maxHP) {
     HP = HP * 5;
     if (HP > maxHP) {
@@ -204,6 +225,7 @@ void remedyUse(int & HP, int & maxHP) {
     }
 }
 
+// If the knight is not being affected by Shaman then add 1
 void remedyPick(int & remedy) {
    remedy++;
    if (remedy > 99) {
@@ -211,10 +233,14 @@ void remedyPick(int & remedy) {
    }
 }
 
+
+// Event 16: Pick up Maiden Kiss
+// If the knight is being affected by Siren Vajsh then use immediately
 void maidenkissUse(int & level, int & beforeFrog) {
     level = beforeFrog;
 }
 
+// If the knight is not being affected by Siren Vajsh then add 1
 void maidenkissPick(int & maidenkiss) {
     maidenkiss++;
     if (maidenkiss > 99) {
@@ -222,6 +248,8 @@ void maidenkissPick(int & maidenkiss) {
     }
 }
 
+
+// Event 17: Pick up Phoenix Down
 void phoenixdownPick(int & phoenixdown) {
     phoenixdown++;
     if (phoenixdown > 99) {
@@ -229,6 +257,9 @@ void phoenixdownPick(int & phoenixdown) {
     }
 }
 
+
+// Event 18: Merlin
+// Main event
 void Merlin(string pack_name, int & HP, int & maxHP) {
     fstream merlinPack;
     merlinPack.open(pack_name, ios::in);
@@ -256,6 +287,8 @@ void Merlin(string pack_name, int & HP, int & maxHP) {
     }
 }
 
+// Child functions
+// Add 2 HP function
 bool MerlinTextCheck2(string txt) {
     int count_m, count_e, count_r, count_l, count_i, count_n = 0;
     for (int i = 0; i < txt.length(); i++) {
@@ -281,6 +314,7 @@ bool MerlinTextCheck2(string txt) {
     }
 }
 
+// Add 3 HP function
 bool MerlinTextCheck3(string txt) {
     int count_merlin = 0;
     if (txt.find('merlin') != -1 || txt.find('Merlin')) {
@@ -290,18 +324,20 @@ bool MerlinTextCheck3(string txt) {
     }
 }
 
+
+// Main function
 void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, int & maidenkiss, int & phoenixdown, int & rescue) {
     // read data from input file and store 3 lines to an array
-    fstream myFile;
-    myFile.open(file_input, ios::in); //read mode
+    fstream inputData;
+    inputData.open(file_input, ios::in);
     string line;
     string data[] = {};
     int line_count = 0;
-    if (myFile.is_open()) {
-        while (getline(myFile, data[line_count])) {
+    if (inputData.is_open()) {
+        while (getline(inputData, data[line_count])) {
             line_count++;
         }
-        myFile.close();
+        inputData.close();
     }
 
     // knight's statistics input
