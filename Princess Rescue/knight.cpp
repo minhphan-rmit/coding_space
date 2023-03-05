@@ -306,7 +306,16 @@ void MushGhost1(string numbers, int & HP) {
     } else if (max_pos == digitsCount(numbers) && min_pos == 0 && up_check == true) {
         mtx = max;
         mti = max_pos;
+    } else if (max_pos != digitsCount(numbers) && max_pos != 0 && min_pos == 0 && up_check == true && down_check == true) {
+        mtx = max;
+        mti = max_pos;
+    } else {
+        mtx = -2;
+        mti = -3;
     }
+
+    // Remaining HP
+    HP = HP - (mtx + mti);
 }
 // Mush Ghost type 3
 void MushGhost1() {
