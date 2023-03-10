@@ -234,7 +234,7 @@ void MushGhost(string file_name, int eventCode, int & HP, int & maxHP) {
 
 // Child functions
 // Mush Ghost type 1
-void MushGhost1(string numbers, int & HP) {
+void MushGhost1(string & numbers, int & HP) {
     int nums[] = {};
     int i = 0;
     stringstream inum(numbers);
@@ -245,22 +245,22 @@ void MushGhost1(string numbers, int & HP) {
 
     int max = nums[0], max_pos = 0, min = nums[0], min_pos = 0;
     for (int j = 0; j < digitsCount(numbers); j++) {
-        if (max < nums[i]) {
-            max = nums[i];
-            max_pos = i;
+        if (max < nums[j]) {
+            max = nums[j];
+            max_pos = j;
         }
     }
     for (int k = 0; k < digitsCount(numbers); k++) {
-        if (min < nums[i]) {
-            min = nums[i];
-            min_pos = i;
+        if (min > nums[k]) {
+            min = nums[k];
+            min_pos = k;
         }
     }
     // Remaining HP
     HP = HP - (max_pos + min_pos);
 }
 // Mush Ghost type 2
-void MushGhost1(string numbers, int & HP) {
+void MushGhost2(string & numbers, int & HP) {
     int nums[] = {};
     int i = 0;
     stringstream inum(numbers);
@@ -271,15 +271,15 @@ void MushGhost1(string numbers, int & HP) {
 
     int max = nums[0], max_pos = 0, min = nums[0], min_pos = 0;
     for (int j = 0; j < digitsCount(numbers); j++) {
-        if (max < nums[i]) {
-            max = nums[i];
-            max_pos = i;
+        if (max < nums[j]) {
+            max = nums[j];
+            max_pos = j;
         }
     }
     for (int k = 0; k < digitsCount(numbers); k++) {
-        if (min < nums[i]) {
-            min = nums[i];
-            min_pos = i;
+        if (min > nums[k]) {
+            min = nums[k];
+            min_pos = k;
         }
     }
     bool up_check, down_check;
@@ -318,12 +318,65 @@ void MushGhost1(string numbers, int & HP) {
     HP = HP - (mtx + mti);
 }
 // Mush Ghost type 3
-void MushGhost1() {
-    
+void MushGhost3(string & numbers, int & HP) {
+    int nums[] = {};
+    int i = 0;
+    stringstream inum(numbers);
+    while (inum.good() && i < digitsCount(numbers)) {
+        inum >> nums[i];
+        ++i;
+    }
+
+    for (int j = 0; j < digitsCount(numbers); j++) {
+        if (nums[j] < 0) {
+            nums[j] = abs(nums[j]);
+        } else {
+            nums[j] = (17 * nums[j] + 9) % 257;
+        }
+    }
+
+    int max = nums[0], max_pos = 0, min = nums[0], min_pos = 0;
+    for (int j = 0; j < digitsCount(numbers); j++) {
+        if (max < nums[j]) {
+            max = nums[j];
+            max_pos = j;
+        }
+    }
+    for (int k = 0; k < digitsCount(numbers); k++) {
+        if (min > nums[k]) {
+            min = nums[k];
+            min_pos = k;
+        }
+    }
+
+    HP = HP - (max_pos + min_pos);
 }
 // Mush Ghost type 4
-void MushGhost1() {
-    
+void MushGhost4(string & numbers, int & HP) {
+    int nums[] = {};
+    int i = 0;
+    stringstream inum(numbers);
+    while (inum.good() && i < digitsCount(numbers)) {
+        inum >> nums[i];
+        ++i;
+    }
+
+    int sortedNums[] = {};
+    for (int j = 0; j < digitsCount(numbers); j++) {
+        sortedNums[j] = nums[j];
+    }
+
+    sort(sortedNums, sortedNums + digitsCount(numbers));
+
+    for (int k = digitsCount(numbers) - 2; k >= 0; k--) {
+        if (sortedNums[k] != sortedNums[digitsCount(numbers) - 1]) {
+            int secondLargestNum = sortedNums[k];
+            int max2 = secondLargestNum;
+            int max2_pos = k;
+        } else {
+            
+        }
+    }
 }
 
 
